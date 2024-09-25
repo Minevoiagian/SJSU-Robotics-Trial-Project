@@ -1,4 +1,3 @@
-
 #include<Wire.h>
 #include <Servo.h>
 Servo servoX;
@@ -50,9 +49,9 @@ void loop(){
 
     int xAng = map(axis_X,minVal,maxVal,-90,90);
     int yAng = map(axis_Y,minVal,maxVal,-90,90);
-    int zAng = map(axis_Z,minVal,maxVal,-90,90);
+    int zAng = map(axis_Z,minVal,maxVal,-90,90);//i tried reading the doc on mapping but when i plug in xAng it is outside -90 to 90
 
-       x= RAD_TO_DEG * (atan2(-yAng, -zAng)+PI);
+       x= RAD_TO_DEG * (atan2(-yAng, -zAng)+PI);//figure that this thing converts it to degrees with trig 
        y= RAD_TO_DEG * (atan2(-xAng, -zAng)+PI);
        z= RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
 
@@ -75,10 +74,10 @@ void loop(){
     
     
     if(abs_diffX > 300){
-    Serial.print("abs_diffX = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    Serial.print("abs_diffX = ");//used in determining the closer angle between 2 angles 
     Serial.println(abs_diffX);
       if(current_degX > previous_degX){
-        movX = (360-current_degX)+previous_degX;
+        movX = (360-current_degX)+previous_degX;//find the angle between 2 lines where the lines are on opposite sides of 0 deg
 
       }
       if(previous_degX > current_degX){
@@ -86,8 +85,8 @@ void loop(){
 
       }
     }
-    if(abs_diffY > 300){
-    Serial.print("abs_diffY = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    if(abs_diffY > 300){//For the Y
+    Serial.print("abs_diffY = ");
     Serial.println(abs_diffY);
       if(current_degY > previous_degY){
         movX = (360-current_degY)+previous_degY;
@@ -95,32 +94,31 @@ void loop(){
       }
       if(previous_degY > current_degY){
         movX = (360-previous_degY)+current_degY;
-
       }
     }    
     movX = current_degX - previous_degX;
     movY = current_degY - previous_degY;
 
-    Serial.print("movX = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    Serial.print("movX = ");
      Serial.println(movX);
-    // Serial.print("movY = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    // Serial.print("movY = ");
     //  Serial.println(movY);
     
     
      if(movX > 0){
-    //   Serial.print("MovX = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    //   Serial.print("MovX = ");
     //  Serial.println(movX)
-    current_servo_posX = 90-movX;
+    current_servo_posX = 90-movX;//for moving the servo to one side or the other of mid point
       servoX.write(current_servo_posX);
      }
      if(movX < 0){
-    //   Serial.print("MovX = ");//rotating breadboard L/R when looking down towards the hole and the arduino is on bottom
+    //   Serial.print("MovX = ");
     //  Serial.println(movX);
     current_servo_posX = 90+movX;
       servoX.write(current_servo_posY);
      }
-     previous_degX = current_degX;//buffer variables 2/2 for tracking difference for the servo movement
-     previous_degY = current_degY;//buffer variables 2/2 for tracking difference for the servo movement
+     previous_degX = current_degX;//buffer variables 2/2 for tracking difference between lines for the servo movement
+     previous_degY = current_degY;//buffer variables 2/2 for tracking difference between lines for the servo movement
      Serial.println("-------------------------------------------");
      delay(250);
 }
